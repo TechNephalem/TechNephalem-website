@@ -11,7 +11,7 @@ export const PageLoader = ({ isLoading }) => {
         <div className="page-loader">
             <div className="loader-content">
                 <div className="logo-animation">
-                    <span className="brand-text">Tech Nephalem</span>
+                    <span className="brand-text">TechNephalem</span>
                 </div>
                 <div className="loading-bar">
                     <div className="loading-progress"></div>

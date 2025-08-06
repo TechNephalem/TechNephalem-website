@@ -1,6 +1,6 @@
 export const appData = {
     "company": {
-        "name": "Tech Nephalem",
+        "name": "TechNephalem",
         "tagline": "AI. SaaS. Web3. Full-Stack Innovation from a New Breed of Builders.",
         "description": "We are a next-gen tech collective building scalable AI SaaS platforms, full-stack MERN applications, and Web3-powered ecosystems.",
         "cta": "Let's Build Together",
@@ -95,7 +95,7 @@ export const appData = {
             "name": "David Johnson",
             "company": "TechCorp Industries",
             "role": "CTO",
-            "content": "Tech Nephalem transformed our legacy system into a modern, scalable platform. Their expertise in AI integration exceeded our expectations.",
+            "content": "TechNephalem transformed our legacy system into a modern, scalable platform. Their expertise in AI integration exceeded our expectations.",
             "rating": 5
         },
         {
