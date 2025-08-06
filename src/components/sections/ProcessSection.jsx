@@ -42,7 +42,6 @@ export const ProcessStep = ({ step, index }) => {
 };
 
 export const ProcessSection = () => {
-    console.log(appData.process)
     return (
         <section id="process" className="section section--bg">
             <div className="container">

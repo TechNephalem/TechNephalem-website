@@ -1,7 +1,7 @@
 import {
     Brain, Cloud, Blocks, Layers, Target, Eye, Users, Check, ArrowRight,
     Play, Sun, Moon, Menu, Github, ExternalLink, Quote, Star, Mail,
-    Phone, MapPin, Linkedin, Twitter, Instagram,Send, Loader, X, ChevronLeft,
+    Phone, MapPin, Linkedin, Twitter, Instagram, Send, Loader, X, ChevronLeft,
     ChevronRight
 } from 'lucide-react';
 import { appData } from '../../data/appData';
@@ -51,16 +51,75 @@ const ContactForm = () => {
         }));
     };
 
+    const sendToTelegram = async (formData) => {
+        const botToken = import.meta.env.VITE_TELEGRAM_BOT_TOKEN;
+        const chatId = import.meta.env.VITE_TELEGRAM_CHAT_ID;
+
+        // Check if credentials are available
+        if (!botToken || !chatId) {
+            throw new Error('Telegram credentials not configured');
+        }
+
+        const message = `
+📝 *New Contact Submission*
+👤 *Name*: ${formData.name}
+📧 *Email*: ${formData.email}
+🏢 *Company*: ${formData.company || 'Not specified'}
+💼 *Project Type*: ${formData.projectType || 'Not specified'}
+💬 *Message*: ${formData.message}
+        `;
+
+        const response = await fetch(`https://api.telegram.org/bot${botToken}/sendMessage`, {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({
+                chat_id: chatId,
+                text: message,
+                parse_mode: 'Markdown'
+            })
+        });
+
+        const data = await response.json();
+
+        // Check if the request was successful
+        if (!response.ok) {
+            throw new Error(`Telegram API error: ${data.description || 'Unknown error'}`);
+        }
+
+        return data;
+    };
+
     const handleSubmit = async (e) => {
-        e.preventDefault();
+
+        // Prevent default if it's a form submission
+        if (e && e.preventDefault) {
+            e.preventDefault();
+        }
+
+        // Validate required fields
+        if (!formState.name.trim() || !formState.email.trim() || !formState.message.trim()) {
+            alert('Please fill in all required fields (Name, Email, and Message)');
+            return;
+        }
+
+        // Basic email validation
+        const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+        if (!emailRegex.test(formState.email)) {
+            alert('Please enter a valid email address');
+            return;
+        }
+
         setIsSubmitting(true);
         setSubmitStatus('loading');
 
         try {
-            // Simulate API call
-            await new Promise(resolve => setTimeout(resolve, 2000));
-
+            // Send data to Telegram
+            await sendToTelegram(formState);
             setSubmitStatus('success');
+
+            // Reset form
             setFormState({
                 name: '',
                 email: '',
@@ -76,6 +135,8 @@ const ContactForm = () => {
 
         } catch (error) {
             setSubmitStatus('error');
+            alert(`Error sending message: ${error.message}`);
+
             setTimeout(() => {
                 setSubmitStatus('idle');
                 setIsSubmitting(false);
@@ -118,7 +179,7 @@ const ContactForm = () => {
     };
 
     return (
-        <form className="contact-form glass-card" onSubmit={handleSubmit}>
+        <div className="contact-form glass-card">
             <div className="form-row">
                 <FormGroup label="Name">
                     <input
@@ -178,10 +239,11 @@ const ContactForm = () => {
                 type="submit"
                 className={`btn btn--primary btn--full-width btn--lg magnetic-btn ${submitStatus === 'success' ? 'success' : ''} ${submitStatus === 'error' ? 'error' : ''}`}
                 disabled={isSubmitting}
+                onClick={handleSubmit}
             >
                 {getSubmitButtonContent()}
             </button>
-        </form>
+        </div>
     );
 };
 
@@ -197,7 +259,7 @@ export const ContactSection = () => {
             title: "Call Us",
             info: appData.contact.phone
         },
-        
+
         // {
         //     icon: MapPin,
         //     title: "Visit Us",
