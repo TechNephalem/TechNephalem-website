@@ -114,7 +114,7 @@ export const appData = {
         }
     ],
     "contact": {
-        "email": "info@technephalem.com",
+        "email": "info@technephalem.in",
         "phone": "+91 88385 37084",
         // "address": "Innovation District, Tech City",
         "linkedin": "https://linkedin.com/company/tech-nephalem",
